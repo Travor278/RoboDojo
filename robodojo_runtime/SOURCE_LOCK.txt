@@ -8,13 +8,14 @@ Vendored paths: env/ src/ task/ utils/ env_cfg/ scripts/
 
 Runtime adapter: robodojo_runtime/bridge.py (not vendored).
 Version 0.3.0 adds the lazy RLinf/RPent simulation bridge and CPU contract
-tests. The vendored paths and environment.patch are unchanged from 0.2.0.
+tests. The environment.patch is unchanged from 0.2.0; the articulation drive-reset
+backport is recorded separately below.
 assets_root() now returns the containing directory, matching the documented
 ROBODOJO_ASSETS_ROOT contract also when the environment variable is unset.
 
 The vendored tree is the tree this integration was validated against, not a
 pristine upstream copy. Upstream's public release is eval-only: it ships
-src/eval_client/ and no steppable environment client at all. There are three
+src/eval_client/ and no steppable environment client at all. There are four
 deliberate differences and no others; they are itemised below.
 
 --------------------------------------------------------------------------
@@ -61,6 +62,22 @@ Why:      a wheel cannot carry a multi-gigabyte Assets/ tree, and RoboDojo
           env/. Splitting them lets the code ship as a distribution while the
           scene data stays on its own volume. With neither variable set the
           values are byte-for-byte upstream's.
+
+--------------------------------------------------------------------------
+4. Upstream drive-reset backport -- PATCHES/articulation-reset-drive.patch
+--------------------------------------------------------------------------
+Upstream commit: 0268168bb0ab3a51c296ca36290697a54f2f5b91 (2026-08-19)
+Upstream PR:     https://github.com/RoboDojo-Benchmark/RoboDojo/pull/30
+File:           env/scene_manager/objects/articulation.py
+sha256:         ed41ae844a32c318ef3286fbd51daf08d7366a293cfdba49620375f13a9d1394
+
+The vendored file matches this upstream revision exactly. Capture authored USD
+DriveAPI target positions at initialization and restore them after resetting
+joint positions in apply_saved_pose() and relocate_offscreen() only when
+physics.reset_drive is true. The base source lock remains 36bfcb7; this is a
+scoped backport, not a full upstream update. Simulator dependency pins and
+reward/threshold logic are unchanged. Upstream's unmerged PR #48 (PhysX runtime
+target synchronization) is not included.
 
 --------------------------------------------------------------------------
 Not vendored

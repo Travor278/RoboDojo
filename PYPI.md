@@ -44,6 +44,11 @@ overrides. They are simulator facts, so they travel with the simulator here.
 * `robodojo_runtime.source_root()` / `assets_root()` / `env_config_path()`.
 * One vendored patch: `env/global_configs.py` honours `ROBODOJO_ROOT` and
   `ROBODOJO_ASSETS_ROOT`, defaulting to upstream behaviour.
+* The articulation drive-reset fix from upstream commit `0268168` (PR #30),
+  recorded separately in `SOURCE_LOCK.txt`. Objects with `physics.reset_drive:
+  true` restore their captured USD drive targets on pose reset; other objects
+  retain their existing reset behavior. This does not include the unmerged
+  PhysX synchronization follow-up in upstream PR #48.
 
 ## What is not in the wheel
 

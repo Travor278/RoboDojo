@@ -70,6 +70,28 @@ with provenance rather than silently folded into the upstream files.
 
 ## Vendored patch
 
+The vendored articulation implementation includes upstream
+[`0268168`](https://github.com/RoboDojo-Benchmark/RoboDojo/commit/0268168bb0ab3a51c296ca36290697a54f2f5b91)
+([PR #30](https://github.com/RoboDojo-Benchmark/RoboDojo/pull/30)). This restores
+captured USD joint drive targets after resetting joint positions in both
+`apply_saved_pose()` and `relocate_offscreen()` when an object's metadata sets
+`physics.reset_drive: true`. SpringButton assets use that flag; the original
+August 7 vendored code ignored it. Objects without the flag keep their existing
+reset behavior. The base upstream revision and simulator dependency pins stay
+unchanged; `SOURCE_LOCK.txt` records this separate backport.
+
+CPU regression tests use real USD stages and replace the simulator boundary:
+
+```bash
+uv run --no-project --python 3.11 --with pytest --with numpy --with pyyaml --with omegaconf --with usd-core python -m pytest tests -q
+```
+
+These tests verify USD target restoration, both reset paths, opt-out behavior
+and removed joints/drives. They do not verify PhysX motion or button rebound.
+The unmerged upstream
+[PR #48](https://github.com/RoboDojo-Benchmark/RoboDojo/pull/48) addresses runtime
+PhysX target synchronization separately and is not included in this backport.
+
 `env/global_configs.py` gains two environment variables, both defaulting to
 upstream behaviour:
 
