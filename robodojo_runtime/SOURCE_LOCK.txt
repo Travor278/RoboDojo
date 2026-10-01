@@ -69,8 +69,9 @@ Why:      a wheel cannot carry a multi-gigabyte Assets/ tree, and RoboDojo
 Upstream commit: 0268168bb0ab3a51c296ca36290697a54f2f5b91 (2026-08-19)
 Upstream PR:     https://github.com/RoboDojo-Benchmark/RoboDojo/pull/30
 File:           env/scene_manager/objects/articulation.py
-sha256:         ed41ae844a32c318ef3286fbd51daf08d7366a293cfdba49620375f13a9d1394
+sha256:         1034c4be4dc23d330c14bd70b95dd6fd663d78051e2fc3b29146d8125bd7e330
 
+The patch uses zero context (replay with git apply --unidiff-zero).
 The vendored file matches this upstream revision exactly. Capture authored USD
 DriveAPI target positions at initialization and restore them after resetting
 joint positions in apply_saved_pose() and relocate_offscreen() only when

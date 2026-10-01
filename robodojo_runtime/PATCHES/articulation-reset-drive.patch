@@ -2,36 +2,15 @@ diff --git a/robodojo_runtime/_source/env/scene_manager/objects/articulation.py 
 index aa4eafe..103b8b7 100644
 --- a/robodojo_runtime/_source/env/scene_manager/objects/articulation.py
 +++ b/robodojo_runtime/_source/env/scene_manager/objects/articulation.py
-@@ -235,6 +235,7 @@ class ArticulationObject(SingleArticulation):
-         self.upper_joint_positions = self.dof_properties["upper"].copy()
-         self.lower_joint_positions = self.dof_properties["lower"].copy()
-         self.initial_joint_positions = self.get_current_joint_positions()
+@@ -237,0 +238 @@ class ArticulationObject(SingleArticulation):
 +        self.initial_drive_targets = self._capture_drive_targets()
-         self.app = omni.kit.app.get_app()
-         self.app.update()
- 
-@@ -259,6 +260,8 @@ class ArticulationObject(SingleArticulation):
- 
-     def apply_saved_pose(self):
-         self.set_current_joint_positions(self.initial_joint_positions)
+@@ -261,0 +263,2 @@ class ArticulationObject(SingleArticulation):
 +        if self.physics_cfg.get("reset_drive", False):
 +            self.reset_drive_targets()
-         pos = self.default_pos
-         ori = self.default_ori
-         scale = self.init_scale
-@@ -283,6 +286,8 @@ class ArticulationObject(SingleArticulation):
-             _FAR_CENTER[2] + random.uniform(-_FAR_JITTER, _FAR_JITTER),
-         )
-         self.set_current_joint_positions(self.initial_joint_positions)
+@@ -285,0 +289,2 @@ class ArticulationObject(SingleArticulation):
 +        if self.physics_cfg.get("reset_drive", False):
 +            self.reset_drive_targets()
-         ori = self.default_ori
-         scale = self.init_scale
-         self.set_local_pose(pos, ori)
-@@ -366,6 +371,59 @@ class ArticulationObject(SingleArticulation):
-         pose = np.concatenate([pos_world, quat_wxyz], axis=0)
-         return pose
- 
+@@ -368,0 +374,53 @@ class ArticulationObject(SingleArticulation):
 +    def _get_joint_drive_type(self, joint_prim) -> str:
 +        """Infer the DriveAPI token ('linear' or 'angular') for a joint prim."""
 +        if joint_prim.IsA(UsdPhysics.PrismaticJoint):
@@ -85,6 +64,3 @@ index aa4eafe..103b8b7 100644
 +                target_attr = drive_api.CreateTargetPositionAttr()
 +            target_attr.Set(value)
 +
-     def get_joint_info(self, joint_name: str = "button_joint"):
-         if joint_name not in self.dof_names:
-             raise ValueError(f"Joint '{joint_name}' not found")
